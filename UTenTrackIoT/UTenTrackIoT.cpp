@@ -1,10 +1,6 @@
 #include "Arduino.h"
 #include "UTenTrackIoT.h"
 
-static const PROGMEM u1_t NWKSKEY[16] = { 0x10, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00, 0x50, 0x00, 0x60, 0x00, 0x70, 0x00, 0x80, 0x0A };
-static const u1_t PROGMEM APPSKEY[16] = { 0x10, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00, 0x50, 0x00, 0x60, 0x00, 0x70, 0x00, 0x80, 0x0A };
-static const u4_t DEVADDR = 0xABCD1111;
-
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
@@ -38,7 +34,7 @@ void do_send(osjob_t* j, int rData) {
         dtostrf(rData, 5, 1, buff);
         // Prepare upstream data transmission at the next possible time.
         LMIC_setTxData2(1, buff, strlen(buff), 0);
-        Serial.print(F("Packet queued"));
+        Serial.println(F("Packet queued"));
     }
     // Next TX is scheduled after TX_COMPLETE event.
     
@@ -111,7 +107,7 @@ void onEvent(ev_t ev) {
     
 }
 
-void UTenTrackIoT::LoRaSend(int value) {
+void UTenTrackIoT::LoRaSend(int value, PROGMEM u1_t NWKSKEY, u1_t PROGMEM APPSKEY, u4_t DEVADDR, u1_t dr, s1_t power) {
 
     Serial.println(F("Starting"));
     
@@ -150,12 +146,12 @@ void UTenTrackIoT::LoRaSend(int value) {
     
     LMIC_setLinkCheckMode(0);
     LMIC.dn2Dr = DR_SF9;
-    LMIC_setDrTxpow(DR_SF7, 14);
+    LMIC_setDrTxpow(dr, power);
 
     //Send the data
     do_send(&sendjob, value);
 
-    os_runloop_once();
+    //os_runloop_once();
 
 }
 
