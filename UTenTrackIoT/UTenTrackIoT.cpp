@@ -1,14 +1,16 @@
 #include "Arduino.h"
 #include "UTenTrackIoT.h"
 
+static const PROGMEM u1_t NWKSKEY[16] = { 0x10, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00, 0x50, 0x00, 0x60, 0x00, 0x70, 0x00, 0x80, 0x0A };
+static const u1_t PROGMEM APPSKEY[16] = { 0x10, 0x00, 0x20, 0x00, 0x30, 0x00, 0x40, 0x00, 0x50, 0x00, 0x60, 0x00, 0x70, 0x00, 0x80, 0x0A };
+static const u4_t DEVADDR = 0xAABB1122;
+
 void os_getArtEui (u1_t* buf) { }
 void os_getDevEui (u1_t* buf) { }
 void os_getDevKey (u1_t* buf) { }
 
 char buff[15];
 
-//Original data type
-static uint8_t mydata[] = "";
 static osjob_t sendjob;
 
 const unsigned TX_INTERVAL = 60;
@@ -107,9 +109,7 @@ void onEvent(ev_t ev) {
     
 }
 
-void UTenTrackIoT::LoRaSend(int value, PROGMEM u1_t NWKSKEY, u1_t PROGMEM APPSKEY, u4_t DEVADDR, u1_t dr, s1_t power) {
-
-    Serial.println(F("Starting"));
+void UTenTrackIoT::LoRaSend(int value, u1_t dr, s1_t power) {
     
     #ifdef VCC_ENABLE
     pinMode(VCC_ENABLE, OUTPUT);
@@ -130,17 +130,7 @@ void UTenTrackIoT::LoRaSend(int value, PROGMEM u1_t NWKSKEY, u1_t PROGMEM APPSKE
     LMIC_setSession (0x1, DEVADDR, NWKSKEY, APPSKEY);
     #endif
     
-    #if defined(CFG_eu868)
-    LMIC_setupChannel(0, 868100000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-    LMIC_setupChannel(1, 868300000, DR_RANGE_MAP(DR_SF12, DR_SF7B), BAND_CENTI);      // g-band
-    LMIC_setupChannel(2, 868500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-    LMIC_setupChannel(3, 867100000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-    LMIC_setupChannel(4, 867300000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-    LMIC_setupChannel(5, 867500000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-    LMIC_setupChannel(6, 867700000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-    LMIC_setupChannel(7, 867900000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-    LMIC_setupChannel(8, 868800000, DR_RANGE_MAP(DR_FSK,  DR_FSK),  BAND_MILLI);      // g2-band
-    #elif defined(CFG_us915)
+    #if defined(CFG_us915)
     LMIC_selectSubBand(1);
     #endif
     
@@ -151,7 +141,7 @@ void UTenTrackIoT::LoRaSend(int value, PROGMEM u1_t NWKSKEY, u1_t PROGMEM APPSKE
     //Send the data
     do_send(&sendjob, value);
 
-    //os_runloop_once();
+    os_runloop_once();
 
 }
 

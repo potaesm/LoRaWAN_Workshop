@@ -12,7 +12,7 @@ class UTenTrackIoT {
 
   public:
     UTenTrackIoT();
-    void LoRaSend(int value, PROGMEM u1_t NWKSKEY, u1_t PROGMEM APPSKEY, u4_t DEVADDR, u1_t dr, s1_t power);
+    void LoRaSend(int value, u1_t dr, s1_t power);
     int DHT11Temp(byte dht_input_pin);
     int DHT11Humid(byte dht_input_pin);
     int LDR(byte ldr_input_pin);
