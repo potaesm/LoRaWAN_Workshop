@@ -1,6 +1,9 @@
 #include "UTenTrackIoT.h"
 
+//Set data rate
 u1_t DR = DR_SF10;
+
+//Set Tx per
 s1_t PW = 14;
 
 UTenTrackIoT A;
@@ -13,7 +16,7 @@ int DATA = 0;
 
 void setup() {
   
-  Serial.begin(115200);
+  Serial.begin(9600);
   
 }
 
