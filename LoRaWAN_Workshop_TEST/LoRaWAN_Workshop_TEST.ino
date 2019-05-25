@@ -3,7 +3,7 @@
 //Set data rate
 u1_t DR = DR_SF10;
 
-//Set Tx per
+//Set Tx power
 s1_t PW = 14;
 
 UTenTrackIoT A;
