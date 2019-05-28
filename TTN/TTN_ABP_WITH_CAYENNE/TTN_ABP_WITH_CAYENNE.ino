@@ -11,9 +11,9 @@ static const PROGMEM u1_t NWKSKEY[16] = { 0x90, 0x5F, 0x5E, 0x5D, 0x4A, 0xB3, 0x
 //Set app session key
 static const u1_t PROGMEM APPSKEY[16] = { 0x1F, 0x00, 0x8D, 0x6E, 0x34, 0xC5, 0x59, 0x88, 0x52, 0x2B, 0x73, 0xCE, 0xD1, 0x6F, 0x22, 0x7A };
 
-//Set data rate
+//Set data rate (DR_SF7 - DR_SF12)
 u1_t DR = DR_SF10;
-//Set Tx power
+//Set Tx power (dBm)
 s1_t PW = 14;
 
 SimpleDHT11 dht11;
@@ -107,10 +107,10 @@ void onEvent (ev_t ev) {
 void do_send(osjob_t* j) {
 
   dht11.read(6, &temp, &humid, NULL);
-  ldr = analogRead(A0)/10;
+  ldr = analogRead(A0) / 10;
 
   lpp.reset();
-  
+
   lpp.addTemperature(3, (float)temp);
   lpp.addRelativeHumidity(4, (float)humid);
   lpp.addAnalogInput(5, ldr);
@@ -132,7 +132,7 @@ void do_send(osjob_t* j) {
 
 void setup() {
 
-  Serial.begin(9600);
+  Serial.begin(115200);
   Serial.println(F("Starting"));
 
 #ifdef VCC_ENABLE
@@ -154,15 +154,15 @@ void setup() {
   LMIC_setSession (0x1, DEVADDR, NWKSKEY, APPSKEY);
 #endif
 
-  LMIC_setupChannel(0, 923200000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-  LMIC_setupChannel(1, 923400000, DR_RANGE_MAP(DR_SF12, DR_SF7B), BAND_CENTI);      // g-band
-  LMIC_setupChannel(2, 922200000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-  LMIC_setupChannel(3, 922400000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-  LMIC_setupChannel(4, 922600000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-  LMIC_setupChannel(5, 922800000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-  LMIC_setupChannel(6, 923000000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-  LMIC_setupChannel(7, 922200000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);      // g-band
-  LMIC_setupChannel(8, 921800000, DR_RANGE_MAP(DR_FSK,  DR_FSK),  BAND_MILLI);      // g2-band
+  LMIC_setupChannel(0, 923200000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);  // g-band
+  LMIC_setupChannel(1, 923400000, DR_RANGE_MAP(DR_SF12, DR_SF7B), BAND_CENTI);  // g-band
+  LMIC_setupChannel(2, 923600000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);  // g-band
+  LMIC_setupChannel(3, 923800000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);  // g-band
+  LMIC_setupChannel(4, 924000000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);  // g-band
+  LMIC_setupChannel(5, 924200000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);  // g-band
+  LMIC_setupChannel(6, 924400000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);  // g-band
+  LMIC_setupChannel(7, 924600000, DR_RANGE_MAP(DR_SF12, DR_SF7),  BAND_CENTI);  // g-band
+  LMIC_setupChannel(8, 924800000, DR_RANGE_MAP(DR_FSK,  DR_FSK),  BAND_MILLI);     // g2-band
 
   LMIC_setLinkCheckMode(0);
 
