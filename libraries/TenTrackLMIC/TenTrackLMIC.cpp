@@ -105,7 +105,7 @@ void onEvent (ev_t ev) {
 
 TenTrackLMIC::TenTrackLMIC() {}
 
-void TenTrackLMIC::LoRaSend(uint8_t data, uint32_t DEVADDR, uint8_t NWKSKEY, uint8_t APPSKEY, u1_t dr, s1_t power) {
+void TenTrackLMIC::LoRaSend(uint8_t data, u1_t dr, s1_t power) {
     Serial.println(F("Starting"));
 
 #ifdef VCC_ENABLE
@@ -126,11 +126,11 @@ void TenTrackLMIC::LoRaSend(uint8_t data, uint32_t DEVADDR, uint8_t NWKSKEY, uin
   // On AVR, these values are stored in flash and only copied to RAM
   // once. Copy them to a temporary buffer here, LMIC_setSession will
   // copy them into a buffer of its own again.
-  //uint8_t appskey[sizeof(APPSKEY)];
-  //uint8_t nwkskey[sizeof(NWKSKEY)];
-  //memcpy_P(appskey, APPSKEY, sizeof(APPSKEY));
-  //memcpy_P(nwkskey, NWKSKEY, sizeof(NWKSKEY));
-  //LMIC_setSession (0x1, DEVADDR, nwkskey, appskey);
+  uint8_t appskey[sizeof(APPSKEY)];
+  uint8_t nwkskey[sizeof(NWKSKEY)];
+  memcpy_P(appskey, APPSKEY, sizeof(APPSKEY));
+  memcpy_P(nwkskey, NWKSKEY, sizeof(NWKSKEY));
+  LMIC_setSession (0x1, DEVADDR, nwkskey, appskey);
 #else
   // If not running an AVR with PROGMEM, just use the arrays directly
   LMIC_setSession (0x1, DEVADDR, NWKSKEY, APPSKEY);
