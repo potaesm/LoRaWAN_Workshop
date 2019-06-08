@@ -1,7 +1,7 @@
 #include "TenTrackLMIC.h"
 
 //Set data rate (DR_SF7 - DR_SF12)
-u1_t DR = DR_SF10;
+u1_t DR = DR_SF7;
 //Set Tx power (dBm)
 s1_t PW = 14;
 

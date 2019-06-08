@@ -1,6 +1,13 @@
 #include "Arduino.h"
 #include "TenTrackLMIC.h"
 
+//Set device address
+static const u4_t DEVADDR = 0x2604153B;
+//Set network session key
+static const PROGMEM u1_t NWKSKEY[16] = { 0xA7, 0x5C, 0x86, 0x6F, 0xC7, 0xE9, 0xC4, 0xDD, 0x82, 0xF9, 0x76, 0xB1, 0x9F, 0xA0, 0xE2, 0xF4 };
+//Set app session key
+static const u1_t PROGMEM APPSKEY[16] = { 0xAF, 0x9F, 0x92, 0x81, 0x72, 0x25, 0x40, 0x86, 0x75, 0x82, 0x1B, 0x04, 0x18, 0x25, 0x8D, 0xCF };
+
 // These callbacks are only used in over-the-air activation, so they are
 // left empty here (we cannot leave them out completely unless
 // DISABLE_JOIN is set in config.h, otherwise the linker will complain).
@@ -158,7 +165,7 @@ void TenTrackLMIC::LoRaSend(uint8_t data, u1_t dr, s1_t power) {
   // Start job
   do_send(&sendjob, data);
 
-  os_runloop_once();
+  // os_runloop_once();
 }
 
 uint8_t TenTrackLMIC::DHT11Temp(byte dht_input_pin) {
